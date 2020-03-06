@@ -1,0 +1,35 @@
+  <ion-header>
+    <ion-toolbar color="primary">
+      <ion-title>Mesonet</ion-title>
+    </ion-toolbar>
+  </ion-header>
+
+  <ion-content>
+    <ion-grid *ngIf="isLoading">
+      <ion-row>
+        <ion-col  class="ion-text-center">
+            <ion-spinner color="primary" > </ion-spinner>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+
+    <ion-grid *ngIf="!isLoading && stations.length>0">
+      <ion-row>
+        <ion-col>
+          <ion-list>
+              <ion-list-header>
+                  Stations
+                </ion-list-header>
+        
+                <ion-item *ngFor="let station of stations" [routerLink]="['/', 'stations', station.split(',')[0]]">
+                  <ion-label>
+                    <h2>{{station.split(',')[0]}}</h2>
+                    <h3>{{station.split(',')[1]}}</h3>
+                  </ion-label>
+                </ion-item>
+          </ion-list>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+
+  </ion-content>
