@@ -53,4 +53,10 @@ export class StationsService {
   getStationData() {
     return this.stationData.slice(1);
   }
+
+  filterStationsBySearch(searchTerm: string) {
+    return this.stations.filter((st, index) => {
+      return (st.split(',')[0].toLowerCase()).startsWith(searchTerm.toLowerCase()) && index > 0;
+    });
+  }
 }

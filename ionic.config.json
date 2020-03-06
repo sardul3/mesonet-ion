@@ -1,5 +1,8 @@
 {
   "name": "mesonet",
-  "integrations": {},
+  "integrations": {
+    "capacitor": {},
+    "cordova": {}
+  },
   "type": "angular"
 }

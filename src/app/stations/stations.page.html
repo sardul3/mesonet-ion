@@ -1,6 +1,8 @@
   <ion-header>
     <ion-toolbar color="primary">
-      <ion-title>Mesonet</ion-title>
+        <ion-menu-button slot="start" color="tertiary"></ion-menu-button>
+      <ion-title>
+        Mesonet</ion-title>
     </ion-toolbar>
   </ion-header>
 
@@ -13,7 +15,14 @@
       </ion-row>
     </ion-grid>
 
-    <ion-grid *ngIf="!isLoading && stations.length>0">
+    <ion-grid *ngIf="!isLoading">
+
+      <ion-row>
+        <ion-col>
+            <ion-searchbar showCancelButton="focus" autocomplete autocorrect [(ngModel)]="searchInput" (ionChange)="searchStations()"></ion-searchbar>
+        </ion-col>
+      </ion-row>
+
       <ion-row>
         <ion-col>
           <ion-list>
