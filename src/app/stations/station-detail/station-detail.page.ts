@@ -27,8 +27,9 @@
         this.station = paramMap.get('stationId');
         this.stationsService.fetchStationData(this.station).subscribe(() => {
           this.isLoading = false;
-          this.stationData = this.stationsService.getStationData();
-          console.log(this.stationData);
+          //this.stationData = this.stationsService.getStationData();
+          this.stationData = this.stationsService.getStData(this.station);
+          console.log('from ts file data', this.stationData);
         });
     });
 
@@ -36,6 +37,10 @@
 
   ionViewWillEnter() {
     this.stationData = this.stationsService.getStationData();
+   }
+
+   sortByJSONOrder() {
+     
    }
 
   }

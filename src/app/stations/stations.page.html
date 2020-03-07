@@ -26,7 +26,7 @@
 
       <ion-row>
           <ion-col>
-              <ion-segment (ionChange)="segmentChanged($event)">
+              <ion-segment (ionChange)="segmentChanged($event, segDefault)" #segDefault value="all">
                   <ion-segment-button value="all">
                     <ion-label>All Stations</ion-label>
                   </ion-segment-button>
@@ -43,9 +43,14 @@
           <ion-list>
                 <ion-item-sliding *ngFor="let station of stations" #slidingItem>
                     <ion-item-options side="end">
-                      <ion-item-option (click)="subscribeStation(slidingItem, station)">
+                      <ion-item-option (click)="subscribeStation(slidingItem, station)" *ngIf="mode==='all'">
                         <ion-icon slot="icon-only" name="add-circle-outline"></ion-icon>
                       </ion-item-option>
+
+                      <ion-item-option (click)="removeStationSubscription(slidingItem, station)" *ngIf="mode==='my'">
+                        <ion-icon slot="icon-only" name="trash"></ion-icon>
+                      </ion-item-option>
+
                     </ion-item-options>            
         
                 <ion-item [routerLink]="['/', 'stations', station.split(',')[0]]"  detail>

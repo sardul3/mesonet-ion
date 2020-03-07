@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import {take, tap} from 'rxjs/operators';
-import { TouchSequence } from 'selenium-webdriver';
 
 
 @Injectable({
@@ -12,6 +11,8 @@ export class StationsService {
   stationData = [];
   myStations = [];
   stationDataJSON = {keys: []};
+  stDataJSON = {keys: []};
+
 
 
   constructor(private http: HttpClient) { }
@@ -41,6 +42,7 @@ export class StationsService {
     return this.stations.slice(1);
   }
 
+
   appendLeadingZeroes(n: number) {
     if (n <= 9) {
       return '0' + n;
@@ -59,7 +61,19 @@ export class StationsService {
                     // tslint:disable-next-line: forin
                     for (const line in res.split('\n')) {
                       this.stationData.push(res.split('\n')[line]);
+
+                      const keysValue = res.split('\n')[0];
+                      const keysArr = keysValue.split(',');
+                      this.stDataJSON.keys = keysArr;
+
+                      const resWithoutHeader = res.split('\n');
+                      const values = (resWithoutHeader[line]);
+                      const valArr = values.split(',');
+                      const valueKey = valArr[1];
+                      const valValue = valArr;
+                      this.stDataJSON[valueKey] = [ valValue ];
                   }
+                    console.log(this.stDataJSON);
                   }));
   }
 
@@ -67,8 +81,27 @@ export class StationsService {
     return this.stationData.slice(1);
   }
 
+  getStData(stationName: string) {
+    const returnedData = {};
+    const keys = this.stDataJSON.keys;
+    keys.forEach(key => {
+      const keyName = keys[keys.indexOf(key)];
+      const keyIndex = keys.indexOf(keyName);
+      const stationRow = this.stDataJSON[stationName];
+      returnedData[keyName] = stationRow[0][keyIndex];
+    });
+    console.log('returned Data', returnedData);
+    return returnedData;
+  }
+
   subscribeStation(name: string) {
     this.myStations.push(name);
+  }
+
+  removeSubscription(name: string) {
+    this.myStations = this.myStations.filter(st => {
+      return st !== name;
+  });
   }
 
   getMyStations() {
@@ -118,7 +151,6 @@ getNearByStations(lat: number, lon: number) {
 
     const dx = lat - stationLat;
     const dy = lon - stationLon;
-    console.log(dx, dy);
 
     const distance = Math.sqrt(dx * dx + dy * dy);
     distances.push(distance);
@@ -128,7 +160,6 @@ getNearByStations(lat: number, lon: number) {
 
   });
  // return (this.stations[closestIndex].split(','))[keys.indexOf('NAME')];
-  console.log(this.stations[closestIndex]);
   return this.stations[closestIndex];
 
 }

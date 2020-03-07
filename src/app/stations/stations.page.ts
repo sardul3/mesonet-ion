@@ -1,7 +1,7 @@
 import { StationsService } from './stations.service';
 import { Component, OnInit } from '@angular/core';
 import { Plugins } from '@capacitor/core';
-import { ToastController, IonItemSliding } from '@ionic/angular';
+import { ToastController, IonItemSliding, IonSegment } from '@ionic/angular';
 
 const { Geolocation } = Plugins;
 
@@ -28,14 +28,10 @@ export class StationsPage implements OnInit {
         this.stations = this.stationsService.getStations();
 
         Geolocation.getCurrentPosition().then(loc => {
-          console.log(loc.coords.latitude, loc.coords.longitude);
           this.myLat = loc.coords.latitude;
           this.myLon = loc.coords.longitude;
-          console.log(typeof loc.coords.longitude);
 
           this.myStations.push(this.stationsService.getNearByStations(this.myLat, this.myLon));
-
-
         });
 
       });
@@ -46,6 +42,7 @@ export class StationsPage implements OnInit {
 ionViewWillEnter() {
  this.searchInput = '';
  this.myStations = this.stationsService.getMyStations();
+ this.mode = 'all';
 
  if (this.mode === 'my') {
   this.stations = this.stationsService.getMyStations();
@@ -56,7 +53,6 @@ ionViewWillEnter() {
 }
 
 searchStations() {
-  console.log(this.searchInput);
   this.stations = this.stationsService.filterStationsBySearch(this.searchInput, this.mode);
 }
 
@@ -73,16 +69,33 @@ subscribeStation(slidingItem: IonItemSliding, stationName: string) {
   });
 }
 
-segmentChanged(event) {
-  console.log(event.detail.value);
+
+removeStationSubscription(slidingItem: IonItemSliding, stationName: string) {
+  slidingItem.close();
+  this.stationsService.removeSubscription(stationName);
+  this.toastController.create({
+    message: 'Stations removed from subscription',
+    duration: 2000,
+    animated: true,
+    color: 'danger'
+  }).then(toastEl => {
+      toastEl.present();
+      this.stations = this.stationsService.getMyStations();
+
+  });
+}
+
+
+segmentChanged(event, seg) {
   this.mode = event.detail.value;
   if (event.detail.value === 'my') {
     this.stations = this.stationsService.getMyStations();
   } else {
     this.stations = this.stationsService.getStations();
   }
-
 }
+
+
 
 
 }
