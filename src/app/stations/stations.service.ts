@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import {take, tap} from 'rxjs/operators';
+import { TouchSequence } from 'selenium-webdriver';
 
 
 @Injectable({
@@ -9,6 +10,7 @@ import {take, tap} from 'rxjs/operators';
 export class StationsService {
   stations = [];
   stationData = [];
+  myStations = [];
 
 
   constructor(private http: HttpClient) { }
@@ -54,9 +56,34 @@ export class StationsService {
     return this.stationData.slice(1);
   }
 
-  filterStationsBySearch(searchTerm: string) {
-    return this.stations.filter((st, index) => {
-      return (st.split(',')[0].toLowerCase()).startsWith(searchTerm.toLowerCase()) && index > 0;
+  subscribeStation(name: string) {
+    this.myStations.push(name);
+  }
+
+  getMyStations() {
+    return this.myStations;
+  }
+
+  isSubscribed(stationName: string) {
+    let flag = false;
+    this.myStations.map(st => {
+      if ( st.split(',')[0].toLowerCase() === stationName.toLowerCase()) {
+        flag = true;
+        return;
+      }
+    });
+    return flag;
+  }
+
+  filterStationsBySearch(searchTerm: string, segmentMode: string) {
+    if (segmentMode === 'all') {
+      return this.stations.filter((st, index) => {
+        return (st.split(',')[0].toLowerCase()).startsWith(searchTerm.toLowerCase()) && index > 0;
+      });
+    } else {
+      return this.myStations.filter((st, index) => {
+        return (st.split(',')[0].toLowerCase()).startsWith(searchTerm.toLowerCase()) && index > 0;
     });
   }
+}
 }
