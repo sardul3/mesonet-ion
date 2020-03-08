@@ -11,15 +11,15 @@
       <ion-content>
         <ion-list>
           <ion-menu-toggle>
-            <ion-item lines="none">
+            <ion-item lines="none" [routerLink] = "['']">
               <ion-icon name="business" slot="start"></ion-icon>
               <ion-label>Stations</ion-label>
             </ion-item>
           </ion-menu-toggle>
           <ion-menu-toggle>
-            <ion-item lines="none">
+            <ion-item lines="none" [routerLink] = "['/', 'subscriptions']">
               <ion-icon name="checkbox-outline" slot="start"></ion-icon>
-              <ion-label>Feedback</ion-label>
+              <ion-label>Subscriptions</ion-label>
             </ion-item>
           </ion-menu-toggle>
         </ion-list>

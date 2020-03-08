@@ -1,7 +1,8 @@
   import { StationsService } from './../stations.service';
   import { Component, OnInit } from '@angular/core';
   import { ActivatedRoute } from '@angular/router';
-  import { NavController } from '@ionic/angular';
+  import { NavController, IonSegment, IonItemSliding, ModalController } from '@ionic/angular';
+  import { ModalPage } from './modal/modal.page';
 
   @Component({
     selector: 'app-station-detail',
@@ -15,7 +16,8 @@
 
     constructor(private route: ActivatedRoute,
                 private navCtrl: NavController,
-                private stationsService: StationsService) { }
+                private stationsService: StationsService,
+                private modalController: ModalController) { }
 
     ngOnInit() {
       // tslint:disable-next-line: deprecation
@@ -27,7 +29,6 @@
         this.station = paramMap.get('stationId');
         this.stationsService.fetchStationData(this.station).subscribe(() => {
           this.isLoading = false;
-          //this.stationData = this.stationsService.getStationData();
           this.stationData = this.stationsService.getStData(this.station);
           console.log('from ts file data', this.stationData);
         });
@@ -39,8 +40,24 @@
     this.stationData = this.stationsService.getStationData();
    }
 
-   sortByJSONOrder() {
-     
+   sortByJSONOrder() { }
+
+   addAlert(slidingItem: IonItemSliding, subscriptionParams, station: string) {
+     slidingItem.close();
+     console.log(subscriptionParams);
+     console.log(station);
+
+     this.modalController.create({
+        component: ModalPage,
+        componentProps: {
+          st: station,
+          variable: subscriptionParams.key,
+          val: subscriptionParams.value
+        }
+     }).then(modalEl => {
+       modalEl.present();
+     })
+
    }
 
   }

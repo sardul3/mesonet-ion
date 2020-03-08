@@ -1,0 +1,39 @@
+<ion-header>
+  <ion-toolbar color="primary">
+      <ion-buttons slot="start">
+        </ion-buttons>
+    <ion-title>Setting subscription for {{st}}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <form (onSubmit)="addAlert(f)" #f="ngForm">
+  <ion-grid>
+    <ion-row>
+      <ion-col>
+          <ion-item>
+              <ion-label position="floating">Variable</ion-label>
+              <ion-input value="{{variable}}" readonly name="var" [(ngModel)]="variable"></ion-input>
+            </ion-item>
+
+            <ion-item>
+                <ion-label position="floating">Current Value</ion-label>
+                <ion-input type="decimal" value="{{val}}" required #current></ion-input>
+              </ion-item>
+
+              <ion-item>
+                  <ion-label position="floating">Setting flag for values {{direction}} </ion-label>
+                  <ion-range (ionChange)="getColors(current.value, range.value)" color="{{colorSlide}}" 
+                             dualKnobs="false" pin="true" value="{{val}}" min="{{slideMin}}" max="{{slideMax}}"
+                             step="1" snaps="true" #range name="val" [(ngModel)]="alertVal"></ion-range>
+              </ion-item>
+
+              <ion-item>
+                <button (click) = "addAlert(f)" expand="block"> Add </button>
+              </ion-item>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</form>
+
+</ion-content>

@@ -41,13 +41,19 @@ export class StationsPage implements OnInit {
 
 ionViewWillEnter() {
  this.searchInput = '';
- this.myStations = this.stationsService.getMyStations();
+
+ this.stationsService.getMyStations().then(myStations => {
+   this.myStations = myStations;
+ });
  this.mode = 'all';
 
  if (this.mode === 'my') {
-  this.stations = this.stationsService.getMyStations();
+  this.stationsService.getMyStations().then(myStations => {
+    this.stations = myStations;
+  });
 } else {
   this.stations = this.stationsService.getStations();
+  console.log('stations', this.stations);
 }
 
 }
@@ -72,7 +78,12 @@ subscribeStation(slidingItem: IonItemSliding, stationName: string) {
 
 removeStationSubscription(slidingItem: IonItemSliding, stationName: string) {
   slidingItem.close();
-  this.stationsService.removeSubscription(stationName);
+  this.stationsService.removeSubscription(stationName).then(st => {
+    console.log('st removed');
+    console.log(st);
+    this.stations = st;
+
+  });
   this.toastController.create({
     message: 'Stations removed from subscription',
     duration: 2000,
@@ -80,7 +91,9 @@ removeStationSubscription(slidingItem: IonItemSliding, stationName: string) {
     color: 'danger'
   }).then(toastEl => {
       toastEl.present();
-      this.stations = this.stationsService.getMyStations();
+      this.stationsService.getMyStations().then(myStations => {
+        this.myStations = myStations;
+      });
 
   });
 }
@@ -89,7 +102,9 @@ removeStationSubscription(slidingItem: IonItemSliding, stationName: string) {
 segmentChanged(event, seg) {
   this.mode = event.detail.value;
   if (event.detail.value === 'my') {
-    this.stations = this.stationsService.getMyStations();
+    this.stationsService.getMyStations().then(myStations => {
+      this.stations = myStations;
+    });
   } else {
     this.stations = this.stationsService.getStations();
   }

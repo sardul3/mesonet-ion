@@ -1,6 +1,9 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import {take, tap} from 'rxjs/operators';
+import { Plugins } from '@capacitor/core';
+
+const { Storage } = Plugins;
 
 
 @Injectable({
@@ -17,8 +20,28 @@ export class StationsService {
 
   constructor(private http: HttpClient) { }
 
+  async setAlerts(alertObj) {
+    let alertsArr = [];
+    if ( (await Storage.get({ key: 'alerts' })).value) {
+      alertsArr = JSON.parse((await Storage.get({ key: 'alerts' })).value);
+    }
+    alertsArr.push(alertObj);
+
+    Storage.set({
+      key: 'alerts',
+      value: JSON.stringify(alertsArr)
+    });
+  }
+
+  async getValuesFromStore(id: string) {
+    const res = await Storage.get({key: id});
+    const values = JSON.parse(res.value);
+    return values;
+  }
+
   fetchStations() {
-    return this.http.get('http://secondary.mesonet.k-state.edu/rest/stationnames/', {responseType: 'text'}).pipe(take(1), tap(res => {
+    return this.http.get('http://secondary.mesonet.k-state.edu/rest/stationnames/', {responseType: 'text'}).pipe(take(1), tap( res => {
+
       // tslint:disable-next-line: forin
       for (const line in res.split('\n')) {
           this.stations.push(res.split('\n')[line]);
@@ -33,9 +56,28 @@ export class StationsService {
           const valueKey = valArr[0];
           const valValue = valArr;
           this.stationDataJSON[valueKey] = [ valValue ];
-
       }
+
     }));
+  }
+
+  setStations() {
+    console.log(this.stationDataJSON);
+    // const returnData = {name: '', county: ''};
+    // returnData.name = valValue[keysArr.indexOf('NAME')];
+    // returnData.county = valValue[keysArr.indexOf('COUNTY')];
+    // let stationsArr = [];
+    // if ( (await Storage.get({ key: 'stations' })).value) {
+    //   stationsArr = JSON.parse((await Storage.get({ key: 'stations' })).value);
+    // }
+    // stationsArr.push(returnData);
+
+    // Storage.set({
+    //   key: 'stations',
+    //   value: JSON.stringify(stationsArr)
+    // });
+    // return this.getValuesFromStore('stations');
+
   }
 
   getStations() {
@@ -94,18 +136,40 @@ export class StationsService {
     return returnedData;
   }
 
-  subscribeStation(name: string) {
+  async subscribeStation(name: string) {
     this.myStations.push(name);
+
+    let myStationsArr = [];
+    if ( (await Storage.get({ key: 'myStations' })).value) {
+      myStationsArr = JSON.parse((await Storage.get({ key: 'myStations' })).value);
+    }
+    myStationsArr.push(name);
+
+    Storage.set({
+      key: 'myStations',
+      value: JSON.stringify(myStationsArr)
+    });
+
+
+
   }
 
-  removeSubscription(name: string) {
-    this.myStations = this.myStations.filter(st => {
+  async removeSubscription(name: string) {
+    let myStationsArr = JSON.parse((await Storage.get({ key: 'myStations' })).value);
+    myStationsArr = myStationsArr.filter(st => {
+      const ind = myStationsArr.indexOf(name);
       return st !== name;
-  });
+    });
+
+    Storage.set({
+      key: 'myStations',
+      value: JSON.stringify(myStationsArr)
+    });
+    return myStationsArr;
   }
 
   getMyStations() {
-    return this.myStations;
+    return this.getValuesFromStore('myStations');
   }
 
   isSubscribed(stationName: string) {

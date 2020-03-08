@@ -1,0 +1,27 @@
+<ion-header>
+  <ion-toolbar color="primary">
+      <ion-menu-button slot="start" color="tertiary"></ion-menu-button>
+    <ion-title>Subscriptions</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-grid>
+    <ion-row>
+      <ion-col>
+        <ion-list>
+          <ion-item *ngFor="let alert of alerts">
+            <ion-label>
+              <h2> {{alert.variable}}</h2>
+              <p>{{alert.station}}</p>
+              <p> {{alert.direction}} {{alert.value}}</p>
+
+            </ion-label>
+            
+          </ion-item>
+        </ion-list>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+</ion-content>

@@ -20,6 +20,10 @@ const routes: Routes = [
     path: 'calender',
     loadChildren: () => import('./calender/calender.module').then( m => m.CalenderPageModule)
   },
+  {
+    path: 'subscriptions',
+    loadChildren: () => import('./subscriptions/subscriptions.module').then( m => m.SubscriptionsPageModule)
+  },
 ];
 
 @NgModule({
