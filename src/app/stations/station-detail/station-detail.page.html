@@ -18,9 +18,8 @@
 
       <ion-grid *ngIf="!isLoading && stationData!==null">
           <ion-row>
-            <ion-col>
+            <ion-col size-sm="6" offset-sm="3">
               <ion-list>      
-                
                   <ion-item-sliding *ngFor="let st of stationData | keyvalue: sortByJSONOrder() | slice:2" #slidingItem>
                       <ion-item-options side="end">
                         <ion-item-option (click) = "addAlert(slidingItem, st, station)">
@@ -34,7 +33,6 @@
                             <h3>{{st.value}}</h3>
                           </ion-label>  
                         </ion-item>  
-      
                     </ion-item-sliding>
                   
               </ion-list>

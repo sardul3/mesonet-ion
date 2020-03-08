@@ -27,6 +27,7 @@ export class ModalPage implements OnInit {
     this.val = Number(this.val);
     this.slideMin = this.val - 30;
     this.slideMax  = this.val + 30;
+    this.alertVal = this.val;
   }
 
 
@@ -39,6 +40,7 @@ export class ModalPage implements OnInit {
   }
 
   addAlert(form: NgForm) {
+    console.log(form.form.value);
     const alertObj = {};
     alertObj['station'] = this.st;
     alertObj['variable'] = form.form.value.var;

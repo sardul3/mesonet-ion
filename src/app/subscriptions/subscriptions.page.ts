@@ -17,4 +17,10 @@ export class SubscriptionsPage implements OnInit {
     });
   }
 
+  ionViewWillEnter(){
+    this.stationsService.getValuesFromStore('alerts').then(alerts => {
+      this.alerts = alerts;
+    });
+  }
+
 }
