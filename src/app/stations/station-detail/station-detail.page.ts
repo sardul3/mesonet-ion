@@ -30,7 +30,6 @@
         this.stationsService.fetchStationData(this.station).subscribe(() => {
           this.isLoading = false;
           this.stationData = this.stationsService.getStData(this.station);
-          console.log('from ts file data', this.stationData);
         });
     });
 
@@ -44,8 +43,6 @@
 
    addAlert(slidingItem: IonItemSliding, subscriptionParams, station: string) {
      slidingItem.close();
-     console.log(subscriptionParams);
-     console.log(station);
 
      this.modalController.create({
         component: ModalPage,

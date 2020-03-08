@@ -21,6 +21,7 @@
             <ion-col size-sm="6" offset-sm="3">
               <ion-list>      
                   <ion-item-sliding *ngFor="let st of stationData | keyvalue: sortByJSONOrder() | slice:2" #slidingItem>
+                    
                       <ion-item-options side="end">
                         <ion-item-option (click) = "addAlert(slidingItem, st, station)">
                           <ion-icon name="eye-outline" slot="icon-only"></ion-icon>

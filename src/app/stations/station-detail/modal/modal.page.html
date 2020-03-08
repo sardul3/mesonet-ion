@@ -25,10 +25,10 @@
                   <ion-label position="floating">Setting flag for values {{direction}} </ion-label>
                   <ion-range (ionChange)="getColors(current.value, range.value)" color="{{colorSlide}}" 
                              dualKnobs="false" pin="true" value="{{val}}" min="{{slideMin}}" max="{{slideMax}}"
-                             step="1" snaps="true" #range name="val" [(ngModel)]="alertVal"></ion-range>
+                             step="1" snaps="true" #range name="val" [(ngModel)]="alertVal" ng-touched required></ion-range>
               </ion-item>
 
-                <ion-button (click) = "addAlert(f)" expand="block" > Add </ion-button>
+                <ion-button [disabled]="!f.valid || val === range.value" (click) = "addAlert(f)" expand="block" > Add </ion-button>
       </ion-col>
     </ion-row>
   </ion-grid>

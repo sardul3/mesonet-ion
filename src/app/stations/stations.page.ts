@@ -53,7 +53,6 @@ ionViewWillEnter() {
   });
 } else {
   this.stations = this.stationsService.getStations();
-  console.log('stations', this.stations);
 }
 
 }
@@ -79,8 +78,6 @@ subscribeStation(slidingItem: IonItemSliding, stationName: string) {
 removeStationSubscription(slidingItem: IonItemSliding, stationName: string) {
   slidingItem.close();
   this.stationsService.removeSubscription(stationName).then(st => {
-    console.log('st removed');
-    console.log(st);
     this.stations = st;
 
   });

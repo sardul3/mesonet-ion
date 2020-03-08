@@ -62,7 +62,6 @@ export class StationsService {
   }
 
   setStations() {
-    console.log(this.stationDataJSON);
     // const returnData = {name: '', county: ''};
     // returnData.name = valValue[keysArr.indexOf('NAME')];
     // returnData.county = valValue[keysArr.indexOf('COUNTY')];
@@ -96,7 +95,6 @@ export class StationsService {
     const date = new Date();
     // tslint:disable-next-line: max-line-length
     const formattedDate = date.getFullYear() + '' + this.appendLeadingZeroes((date.getMonth() + 1)) + '' + this.appendLeadingZeroes(date.getDate()) + '000000';
-
     // tslint:disable-next-line: max-line-length
     return this.http.get(`http://secondary.mesonet.ksu.edu/rest/stationdata/?stn=${stationName}&int=day&t_start=${formattedDate}&t_end=${formattedDate}`,
                   {responseType: 'text'}).pipe(take(1), tap(res => {
@@ -115,7 +113,6 @@ export class StationsService {
                       const valValue = valArr;
                       this.stDataJSON[valueKey] = [ valValue ];
                   }
-                    console.log(this.stDataJSON);
                   }));
   }
 
@@ -132,7 +129,6 @@ export class StationsService {
       const stationRow = this.stDataJSON[stationName];
       returnedData[keyName] = stationRow[0][keyIndex];
     });
-    console.log('returned Data', returnedData);
     return returnedData;
   }
 
@@ -210,8 +206,6 @@ getNearByStations(lat: number, lon: number) {
     const stationRow = this.stationDataJSON[stationName];
     stationLat = Number(stationRow[0][latKeyJSON]);
     stationLon = Number(stationRow[0][lonKeyJSON]);
-    console.log(typeof stationRow[0][lonKeyJSON])
-    console.log(stationRow, typeof stationLat, typeof stationLon);
 
     const dx = lat - stationLat;
     const dy = lon - stationLon;

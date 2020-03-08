@@ -1,5 +1,5 @@
 import { StationsService } from './../../stations.service';
-import { NavController, ModalController } from '@ionic/angular';
+import { NavController, ModalController, ToastController } from '@ionic/angular';
 import { Component, OnInit, Input } from '@angular/core';
 import { NgForm } from '@angular/forms';
 
@@ -21,7 +21,8 @@ export class ModalPage implements OnInit {
   alerts = [];
 
   constructor(private modalController: ModalController,
-              private stationsService: StationsService) { }
+              private stationsService: StationsService,
+              private toastController: ToastController) { }
 
   ngOnInit() {
     this.val = Number(this.val);
@@ -40,7 +41,6 @@ export class ModalPage implements OnInit {
   }
 
   addAlert(form: NgForm) {
-    console.log(form.form.value);
     const alertObj = {};
     alertObj['station'] = this.st;
     alertObj['variable'] = form.form.value.var;
@@ -48,9 +48,17 @@ export class ModalPage implements OnInit {
     alertObj['direction'] = this.direction;
 
     this.alerts.push(alertObj);
-    console.log(this.alerts);
     this.stationsService.setAlerts(alertObj);
     this.modalController.dismiss();
+    
+    this.toastController.create({
+      message: 'Subscription added with success',
+      duration: 2000,
+      animated: true,
+      color: 'success'
+    }).then(toastEl => {
+        toastEl.present();
+    });
   }
 
 }
